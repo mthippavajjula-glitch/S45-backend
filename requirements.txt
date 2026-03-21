@@ -1,5 +1,5 @@
 fastapi
 uvicorn
 crewai
-crewai[google-genai
+crewai[google-genai]
 pysqlite3-binary
