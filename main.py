@@ -23,10 +23,9 @@ app.add_middleware(
 # --- At the top of main.py ---
 class DealRequest(BaseModel):
     company_name: str
-    # Replace single year inputs with 3-year history
-    revenue_y1: float  # Current Year
-    revenue_y2: float  # Previous Year
-    revenue_y3: float  # 2 Years Ago
+    revenue_y1: float
+    revenue_y2: float
+    revenue_y3: float
     profit_y1: float
     profit_y2: float
     profit_y3: float
