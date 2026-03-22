@@ -20,34 +20,32 @@ app.add_middleware(
 )
 
 # Define what the input data should look like
+# --- At the top of main.py ---
 class DealRequest(BaseModel):
     company_name: str
-    revenue: float
-    pat: float
+    # Replace single year inputs with 3-year history
+    revenue_y1: float  # Current Year
+    revenue_y2: float  # Previous Year
+    revenue_y3: float  # 2 Years Ago
+    profit_y1: float
+    profit_y2: float
+    profit_y3: float
     debt: float
-
-@app.get("/")
-async def root():
-    return {
-        "status": "online",
-        "message": "S45 Investment Banking AI Backend is Live",
-        "endpoints": ["/analyze-deal (POST)"]
-    }
+    additional_info: str = ""
 
 @app.post("/analyze-deal")
 async def analyze_deal(request: DealRequest):
-    # This calls your CrewAI logic using the data from the form
+    print(f"🚀 Received 3-year data for: {request.company_name}")
+    
+    # Pass all new variables to the agent runner
     result = run_s45_screening(
         company_name=request.company_name,
-        revenue=request.revenue,
-        pat=request.pat,
-        debt=request.debt
+        rev_y1=request.revenue_y1, rev_y2=request.revenue_y2, rev_y3=request.revenue_y3,
+        pat_y1=request.profit_y1, pat_y2=request.profit_y2, pat_y3=request.profit_y3,
+        debt=request.debt,
+        additional_info=request.additional_info
     )
-    
-    return {
-        "status": "success",
-        "analysis_report": result
-    }
+    return {"status": "success", "analysis_report": result}
 
 if __name__ == "__main__":
     import uvicorn
