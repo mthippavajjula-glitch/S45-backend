@@ -38,21 +38,22 @@ ranker = Agent(
 # 2. THE BRIDGING FUNCTION (Called by FastAPI or Lovable)
 # =================================================================
 
-def run_s45_screening(company_name, revenue, pat, debt):
+def run_s45_screening(company_name, rev_y1, rev_y2, rev_y3, pat_y1, pat_y2, pat_y3, debt, additional_info):
     """
     Takes dynamic inputs from a web form and runs the agentic workflow.
     """
     
     # Construct the raw document string using the inputs
     dynamic_document = f"""
-    Company Name: {company_name}
-    Recent Financial Performance:
-    - Revenue: ${revenue}M
-    - Profit (PAT): ${pat}M
-    - Total Debt: ${debt}M
-    Additional Info: The company has been profitable for the last few years.
+    COMPANY: {company_name}
+    
+    FINANCIAL HISTORY (Last 3 Years):
+    - REVENUE: Year 1: ${rev_y1}M | Year 2: ${rev_y2}M | Year 3: ${rev_y3}M
+    - PROFIT (PAT): Year 1: ${pat_y1}M | Year 2: ${pat_y2}M | Year 3: ${pat_y3}M
+    - CURRENT DEBT: ${debt}M
+    
+    NOTES: {additional_info}
     """
-
     # Tasks are defined inside the function so they use the new data every time
     extract_task = Task(
         description=f"Analyze this company data: {dynamic_document}. Extract the key financial numbers.",
@@ -61,12 +62,15 @@ def run_s45_screening(company_name, revenue, pat, debt):
     )
 
     audit_task = Task(
-        description="Check the extracted numbers against S45 standards: 3 years of profit is required.",
-        expected_output="A pass/fail report on IPO eligibility.",
+        description=(
+            "Verify the 3-year profit trend. SEBI criteria requires positive profit "
+            "in at least 3 of the last years. Calculate the Revenue CAGR."
+        ),
+        expected_output="A PASS/FAIL compliance audit based on the 3-year history provided.",
         agent=auditor,
         context=[extract_task]
     )
-
+    
     rank_task = Task(
         description="Compare this company's profile to a benchmark of a $100M revenue unicorn. Give a Rank (1-10).",
         expected_output="A final 'S45 Readiness Score' with 3 reasons for the rank.",
