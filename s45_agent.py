@@ -6,7 +6,7 @@ os.environ["GEMINI_API_KEY"] = os.getenv("GEMINI_API_KEY")
 gemini_llm = LLM(
     model="gemini/gemini-2.5-flash", 
     api_key=os.environ["GEMINI_API_KEY"],
-    temperature=0.7
+    temperature=0.0
 )
 
 # Define Agents Globally so they stay in memory
