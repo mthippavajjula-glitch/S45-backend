@@ -26,6 +26,14 @@ class DealRequest(BaseModel):
     pat: float
     debt: float
 
+@app.get("/")
+async def root():
+    return {
+        "status": "online",
+        "message": "S45 Investment Banking AI Backend is Live",
+        "endpoints": ["/analyze-deal (POST)"]
+    }
+
 @app.post("/analyze-deal")
 async def analyze_deal(request: DealRequest):
     # This calls your CrewAI logic using the data from the form
