@@ -1,7 +1,7 @@
 import os
 from crewai import Agent, Task, Crew, Process, LLM
 
-os.environ["GEMINI_API_KEY"] = "AIzaSyANp61u3s7eLlI6iFv-LrYWuiaEe9Tglk4"
+os.environ["GEMINI_API_KEY"] = os.getenv("GEMINI_API_KEY")
 
 gemini_llm = LLM(
     model="gemini/gemini-2.5-flash", 
