@@ -79,11 +79,13 @@ def run_s45_screening(company_name, rev_y1, rev_y2, rev_y3, pat_y1, pat_y2, pat_
         "1. Data Completeness (Is there a full 3-year history?) "
         "2. Data Verifiability (Are there specific numbers vs vague phrases?) "
         "3. Calculation Consistency (Does the profit align with revenue growth?)"
+        
         "Use the following STRICT FORMATTING rules: "
         "1. Use '---' to separate sections. "
-        "2. Add two empty lines between every numbered point. "
-        "3. Use clear, bold headers without excessive markdown symbols. "
-        "4. Ensure the score is prominently at the top."
+        "2. STRICT FORMATTING: Do NOT use HTML tags like <br>."
+        "3. Add two empty lines between every numbered point. "
+        "4. Use clear, bold headers without excessive markdown symbols. "
+        "5. Ensure the score is prominently at the top."
     ),
     expected_output="""
     S45 READINESS SCORE: [X]/10
