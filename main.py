@@ -2,6 +2,7 @@ __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import os
+import re
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -44,7 +45,16 @@ async def analyze_deal(request: DealRequest):
         debt=request.debt,
         additional_info=request.additional_info
     )
-    return {"status": "success", "analysis_report": result}
+    confidence_match = re.search(r"CONFIDENCE_SCORE:\s*(\d+)%", result)
+    confidence_value = int(confidence_match.group(1)) if confidence_match else 85
+
+    clean_report = re.sub(r"CONFIDENCE_SCORE:.*", "", result).strip()
+    
+    return {
+    "status": "success", 
+    "analysis_report": clean_report, 
+    "confidence_score": confidence_value
+}
 
 if __name__ == "__main__":
     import uvicorn
