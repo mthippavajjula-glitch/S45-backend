@@ -72,11 +72,34 @@ def run_s45_screening(company_name, rev_y1, rev_y2, rev_y3, pat_y1, pat_y2, pat_
     )
     
     rank_task = Task(
-        description="Compare this company's profile to a benchmark of a $100M revenue unicorn. Give a Rank (1-10).",
-        expected_output="A final 'S45 Readiness Score' with 3 reasons for the rank.",
-        agent=ranker,
-        context=[audit_task]
-    )
+    description=(
+        "Based on the audit and extraction, provide a final Investment Readiness Report. "
+        "Use the following STRICT FORMATTING rules: "
+        "1. Use '---' to separate sections. "
+        "2. Add two empty lines between every numbered point. "
+        "3. Use clear, bold headers without excessive markdown symbols. "
+        "4. Ensure the score is prominently at the top."
+    ),
+    expected_output="""
+    S45 READINESS SCORE: [X]/10
+    
+    INVESTMENT THESIS
+    [3-4 sentences on the overall opportunity]
+    
+    
+    DETAILED ANALYSIS:
+    
+    1. GROWTH TRAJECTORY: [Detailed text]
+    
+    
+    2. COMPLIANCE & AUDIT: [Detailed text]
+    
+    
+    3. STRATEGIC POSITIONING: [Detailed text]
+    """,
+    agent=ranker,
+    context=[extract_task, audit_task]
+)
 
     # Initialize the Crew
     s45_crew = Crew(
