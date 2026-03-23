@@ -74,6 +74,11 @@ def run_s45_screening(company_name, rev_y1, rev_y2, rev_y3, pat_y1, pat_y2, pat_
     rank_task = Task(
     description=(
         "Based on the audit and extraction, provide a final Investment Readiness Report. "
+        "At the very end of your report, add a single line: 'CONFIDENCE_SCORE: [0-100]'. "
+        "Calculate this based on: "
+        "1. Data Completeness (Is there a full 3-year history?) "
+        "2. Data Verifiability (Are there specific numbers vs vague phrases?) "
+        "3. Calculation Consistency (Does the profit align with revenue growth?)"
         "Use the following STRICT FORMATTING rules: "
         "1. Use '---' to separate sections. "
         "2. Add two empty lines between every numbered point. "
@@ -96,6 +101,8 @@ def run_s45_screening(company_name, rev_y1, rev_y2, rev_y3, pat_y1, pat_y2, pat_
     
     
     3. STRATEGIC POSITIONING: [Detailed text]
+
+    CONFIDENCE_SCORE: [Percentage]%
     """,
     agent=ranker,
     context=[extract_task, audit_task]
